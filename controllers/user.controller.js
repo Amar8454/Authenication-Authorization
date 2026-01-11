@@ -101,12 +101,38 @@ export const loggedUser = async (req, res) => {
       .status(200)
       .clearCookie("accessToken", option)
       .json({ message: "User LogOUt" });
-
   } catch (error) {
     return res.status(500).json({ error: error.message || error });
   }
 };
 
-export const getUserDetail = async (req, res)=>{
-  
-}
+export const getUserProfile = async (req, res) => {
+  try {
+    const user = req?.user;
+    if (!user) {
+      return res.status(400).json({ message: "User not exist" });
+    }
+
+    return res.status(200).json({
+      success: true,
+      user: user,
+    });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+export const getAllUser = async (req, res) => {
+  try {
+    const AllUser = await User.find().select("-password");
+    console.log(AllUser);
+    if (!AllUser) {
+      return res.status(400).json({ message: "User not Available" });
+    }
+
+    return res.status(200).json({ success: true, user: AllUser });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error", error });
+  }
+};
+

@@ -12,6 +12,7 @@ export const verifyUser = async (req, res, next) => {
     }
 
     const decode = jwt.verify(accessToken, process.env.JWT_SCERET);
+
     const user = await User.findById(decode?._id).select("-password")
     if(!user){
       return res.status(401).json({message: "Invalid access Token"})
